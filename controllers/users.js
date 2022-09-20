@@ -12,10 +12,11 @@ const getAllUsers = (req, res) => {
 };
 
 const getUserById = (req, res) => {
+  console.log(req.params.id)
   // SELECT USERS WHERE ID = <REQ PARAMS ID>
-  let sql = "SELECT ?? FROM ?? WHERE ?? = ?";
+  let sql = "SELECT * FROM ?? WHERE ?? = ?";
   // WHAT GOES IN THE BRACKETS
-  const replacements = ["*", "users", "id", req.params.id]
+  const replacements = ["users", "id", req.params.id]
   sql = mysql.format(sql, replacements);
 
   pool.query(sql, (err, rows) => {
@@ -25,10 +26,12 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
+  console.log(`We're trying to add user ${req.body.first_name} ${req.body.last_name}.`)
   // INSERT INTO USERS FIRST AND LAST NAME
-  let sql = "QUERY GOES HERE";
+  let sql = "INSERT INTO users (first_name, last_name) VALUES (?, ?)";
   // WHAT GOES IN THE BRACKETS
-  sql = mysql.format(sql, []);
+  const replacements = [req.body.first_name, req.body.last_name]
+  sql = mysql.format(sql, replacements);
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err);
